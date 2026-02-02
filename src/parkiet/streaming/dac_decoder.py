@@ -180,8 +180,11 @@ class IncrementalDACDecoder:
         Returns:
             Audio samples as numpy array
         """
-        # Validate codes are in valid range [0, 1023]
-        codes = torch.clamp(codes, 0, 1023)
+        # Validate codes: set invalid values (EOS=1024, PAD=1025, BOS=1026, negatives) to 0
+        # Valid DAC codes are 0-1023
+        invalid_mask = (codes < 0) | (codes > 1023)
+        codes = codes.clone()
+        codes[invalid_mask] = 0
 
         # DAC expects [B, C, T] format
         codes = codes.unsqueeze(0).transpose(1, 2)  # [1, C, T]
