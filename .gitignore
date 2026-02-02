@@ -8,4 +8,5 @@ logs/
 wandb/
 shards/
 bucket_mp3_files.txt
+dia-nl-v1.pth
 .DS_Store
